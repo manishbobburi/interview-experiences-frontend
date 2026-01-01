@@ -1,25 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useLoaderData  } from 'react-router-dom';
 import PostCard from './components/PostCard';
-import type { PostProps } from '../../types';
-import { getPosts } from '../../services/posts.api';
+import type { PostProps } from './post.types';
 
 function PostsPage() {
-  
-  const [posts, setPosts] = useState<PostProps[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    getPosts()
-    .then(setPosts)
-    .catch(e => setError(e.message))
-    .finally(() => setLoading(false));
-    console.log(posts);
-  },[]);
-
-  if(loading) return <div>Loading...</div>
-
-  if(error) return <div>{error}</div>
+  const posts = useLoaderData<PostProps[]>();
   
   if(posts.length === 0) return <div>No posts found.</div>
 
