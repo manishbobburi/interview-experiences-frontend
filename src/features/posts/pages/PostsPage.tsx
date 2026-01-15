@@ -1,15 +1,16 @@
 import { useLoaderData  } from 'react-router-dom';
 import PostCard from './components/PostCard';
 import type { PostProps } from './post.types';
+import type { ApiResponse } from '../../types';
 
 function PostsPage() {
-  const posts = useLoaderData<PostProps[]>();
+  const posts = useLoaderData<ApiResponse<PostProps[]>>();
   
-  if(posts.length === 0) return <div>No posts found.</div>
+  if(posts.data.length === 0) return <div>No posts found.</div>
 
   return (
     <div>
-      {posts.map(post => (
+      {posts.data.map(post => (
           <PostCard key={post.id} post={post}/>
         ))}
     </div>
