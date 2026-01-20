@@ -9,13 +9,15 @@ export interface SignUpPayload {
   password: string;
 }
 
-export interface SignInUser {
+export interface User {
   id: number;
   name: string;
   email: string;
-  role: "viewer" | "poster" | string;
+  role: "viewer" | "poster";
   verified: boolean;
-  jwt: string;
+}
 
-  passwordHash: string;
+export interface AuthResponse {
+  token: string;
+  user: User;
 }

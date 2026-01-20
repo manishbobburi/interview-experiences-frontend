@@ -3,3 +3,9 @@ export type ApiResponse<T> = {
     data: T,
     message: string,
 }
+
+export type ApiError = {
+    type?: 'NETWORK_ERROR' | 'SERVER_ERROR' | 'API_ERROR';
+    status?: number;
+    message?: string;
+}
