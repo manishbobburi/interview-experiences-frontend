@@ -1,33 +1,50 @@
-import { useState} from 'react';
-import { Plus } from 'lucide-react';
-import CreatePostModal from './CreatePostModal';
-import type { CreatePostPayload } from '../post.types';
+import { useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
+
+import { useAuth } from "../../auth/auth.context";
 
 function CreatePostButton() {
-  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-  const handleCreate = (data: CreatePostPayload) => {
-    console.log("Create post payload:", data);
-    // call API here
+  const isPoster = user?.role === "poster";
+
+  const handleCreate = () => {
+    if (user?.role !== "poster") {
+      console.warn("Unauthorized");
+      return;
+    }
+
+    navigate("/post");
   };
 
   return (
     <>
-      { !open &&
-        <button className='inline-flex items-center justify-center p-4 rounded-full bg-blue-600/10 backdrop-blur-md border border-white/20 shadow-lg'
-      onClick={() => setOpen(true)}
-      >
-        <Plus className=' w-8 h-8' strokeWidth={2.5}/>
-      </button>
-      }
+      {isPoster && (
+        <button
+          onClick={handleCreate}
+          className="
+            fixed bottom-6 right-6
+            sm:bottom-10 sm:right-10
+            lg:bottom-20 lg:right-20
 
-      <CreatePostModal
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          onSubmit={handleCreate}
-      />
-      </>
-  )
+            inline-flex items-center justify-center rounded-full
+            bg-black backdrop-blur-md border border-white/20 shadow-lg
+
+            p-3 sm:p-4 lg:p-5"
+        >
+          <Plus
+            className="
+            text-white
+              w-5 h-5
+              sm:w-7 sm:h-7
+              lg:w-8 lg:h-8"
+            strokeWidth={2.5}
+          />
+        </button>
+      )}
+    </>
+  );
 }
 
-export default CreatePostButton
+export default CreatePostButton;
