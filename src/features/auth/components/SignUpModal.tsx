@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BaseModal from '../../../components/BaseModal';
 import type { SignUpPayload } from '../auth.types';
 
@@ -22,6 +23,8 @@ export default function SignUpModal({ isOpen, onClose, onSubmit }: Props) {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const navigate = useNavigate();
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -56,9 +59,9 @@ export default function SignUpModal({ isOpen, onClose, onSubmit }: Props) {
       ...prev,
       [name]: value,
     }));
-    // Clear error for this field when user starts typing
+
     if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({
+      setErrors(prev => ({ // clear error for this field when user starts typing
         ...prev,
         [name]: undefined,
       }));
@@ -92,17 +95,15 @@ export default function SignUpModal({ isOpen, onClose, onSubmit }: Props) {
       title="Create Account"
       onClose={onClose}
       footer={
-        <div className="flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-sm">
-            Cancel
-          </button>
-          <button
-            disabled={isSubmitting}
-            onClick={handleSubmit}
-            className="rounded bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
-          >
-            {isSubmitting ? 'Creating account...' : 'Sign Up'}
-          </button>
+          <div className="flex items-center gap-3 flex-col">
+            <button
+              disabled={isSubmitting}
+              onClick={handleSubmit}
+              className="rounded bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
+            >
+              {isSubmitting ? 'Creating account...' : 'Sign Up'}
+            </button>
+            <p className='text-gray-500 text-[14px] text-center'>Already have an account? <span className='text-blue-700 underline underline-offset-3 cursor-pointer' onClick={() => navigate("/signin")}>Sign In</span></p>
         </div>
       }
     >
