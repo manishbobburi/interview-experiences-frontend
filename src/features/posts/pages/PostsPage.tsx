@@ -1,7 +1,7 @@
 import { useLoaderData  } from 'react-router-dom';
-import PostCard from './components/PostCard';
-import type { PostProps } from './post.types';
-import type { ApiResponse } from '../../types';
+import PostCard from '../components/PostCard';
+import type { PostProps } from '../post.types';
+import type { ApiResponse } from '../../../types';
 
 function PostsPage() {
   const posts = useLoaderData<ApiResponse<PostProps[]>>();
@@ -9,10 +9,11 @@ function PostsPage() {
   if(posts.data.length === 0) return <div>No posts found.</div>
 
   return (
-    <div>
+    <div className='pt-15'>
       {posts.data.map(post => (
           <PostCard key={post.id} post={post}/>
-        ))}
+        )
+      )}
     </div>
   )
 }
