@@ -14,7 +14,7 @@ export default function Card({children, className = "", onClick}: CardProps) {
                 bg-white 
                 border border-gray-200 
                 rounded-xl 
-                p-4 
+                p-4
                 shadow-sm 
                 hover:shadow-md 
                 transition

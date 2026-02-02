@@ -1,10 +1,10 @@
 import type { ButtonProps, ButtonVariant, ButtonShape, ButtonSize } from '../types';
 
 const variantClasses: Record<ButtonVariant, string> = {
-    primary: 'bg-black px-4 py-2 text-sm text-white hover:bg-gray-800',
-    secondary: 'px-4 py-2 text-sm text-gray-600 hover:bg-gray-100',
-    danger: 'bg-red-600 text-white hover:bg-red-700',
-    ghost: 'bg-transparent text-gray-700 hover:bg-gray-100'
+    primary: 'bg-black px-4 py-2 text-sm text-white hover:bg-gray-800 cursor-pointer',
+    secondary: 'px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer',
+    danger: 'bg-red-600 text-white hover:bg-red-700 cursor-pointer',
+    ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 cursor-pointer'
 }
 
 const shapeClasses: Record<ButtonShape, string> = {

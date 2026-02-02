@@ -1,9 +1,9 @@
 import { Pencil, Trash } from 'lucide-react';
 
 type DropDownProps = {
-  onEdit: () => {};
+  onEdit: () => void;
   onDelete: () => {};
-  onClose: () => {};
+  onClose: () => void;
 }
 
 function DropDown({ onEdit, onDelete, onClose }: DropDownProps) {
