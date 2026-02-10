@@ -13,6 +13,7 @@ function NavItem({ onItemClick }: NavItemProps) {
   const handleAction = (path: string, isLogout: boolean = false) => {
     if (isLogout) {
       signOutCxt();
+      navigate("/signin")
     } else {
       navigate(path);
     }
