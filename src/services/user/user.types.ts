@@ -3,3 +3,8 @@ export type UserDetails = {
     name: string | null;
     email: string | null;
 }
+
+export interface PasswordDetails {
+    oldPassword: string;
+    newPassword: string;
+}
