@@ -1,9 +1,14 @@
 import api from './axios';
-import type { PostProps } from '../features/posts/post.types';
+import type { Cursor, PaginatedPosts, PostProps } from '../features/posts/post.types';
 import type { ApiResponse } from '../types/api.types'
 
-export const getPosts = async (): Promise<ApiResponse<PostProps[]>> => {
-  return await api.get('/posts');
+export const getPosts = async (cursor?: Cursor): Promise<ApiResponse<PaginatedPosts>> => {
+  const params = new URLSearchParams();
+    if(cursor) {
+      params.append("createdAt", cursor.createdAt);
+      params.append("id", String(cursor.id));
+    }
+  return await api.get('/posts', { params });
 };
 
 export const getPostById = async (id: number): Promise<ApiResponse<PostProps>> => {
