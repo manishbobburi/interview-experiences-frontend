@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/auth.context";
 import Button from "../../../components/Button";
 import EditableField from "./EditableField";
+import ChangePassword from './ChangePassword';
 import { changeUserDetails } from "../../../services/user/user.api";
 
 function UserDetails() {
@@ -116,6 +117,8 @@ function UserDetails() {
           onChange={handleChange}
           onToggle={() => toggleEdit("email")}
         />
+
+        <ChangePassword />
       </div>
 
       {isEditing && (
