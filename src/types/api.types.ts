@@ -5,7 +5,7 @@ export type ApiResponse<T> = {
 }
 
 export type ApiError = {
-    type?: 'NETWORK_ERROR' | 'SERVER_ERROR' | 'API_ERROR';
+    type: string;
     status?: number;
-    message?: string;
+    message: string;
 }
