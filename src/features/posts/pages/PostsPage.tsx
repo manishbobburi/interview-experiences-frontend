@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import PostCard from "../components/PostCard";
-import type { PaginatedPosts, PostProps, Cursor } from "../post.types";
-import { getPosts } from "../../../services/posts.api";
 import type { ApiResponse } from "../../../types";
+import { getPosts } from "../../../services/posts.api";
+import type { PaginatedPosts, PostProps, Cursor } from "../post.types";
 
 function PostsPage() {
   const initial = useLoaderData<ApiResponse<PaginatedPosts>>();
@@ -12,6 +12,10 @@ function PostsPage() {
   const [cursor, setCursor] = useState<Cursor | null>(initial.data.nextCursor);
   const [hasMore, setHasMore] = useState(initial.data.hasMore);
   const [loading, setLoading] = useState(false);
+  const { searchQuery } = useOutletContext<{ searchQuery: string }>();
+  const [debouncedSearch, setDebouncedSearch] = useState(searchQuery);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
 
   async function fetchMore() {
     if (!hasMore || loading) return;
@@ -38,7 +42,24 @@ function PostsPage() {
     setLoading(false);
   }
 
-  const bottomRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const timer = setTimeout(() =>  {
+      setDebouncedSearch(searchQuery);
+    }, 400)
+
+    return () => clearTimeout(timer);
+  },[searchQuery]);
+
+  const visiblePosts = useMemo(() => {
+    if(!searchQuery) return posts;
+    
+    const q = debouncedSearch.toLowerCase();
+
+    return posts.filter(p => 
+      p.company.toLowerCase().includes(q) || p.role.toLowerCase().includes(q)
+    )
+  }, [posts, debouncedSearch])
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -49,10 +70,10 @@ function PostsPage() {
       },
       { threshold: 0.5 }
       /*
-        IntersectionObserver: is a browser API that watches an element and tells you when it becomes visble inside the viewport
+        IntersectionObserver: is a browser API that watches an element and tells me when it becomes visble inside the viewport
        */
       /* 
-        This threshold controls how early the fetch happens
+        threshold controls how early the fetch happens
         0 -> trigger as soon as even 1 pixel is visible.
         0.5 -> half visible.
         1 -> fully visible
@@ -69,7 +90,7 @@ function PostsPage() {
 
   return (
     <div className="pt-15">
-      {posts.map((post) => (
+      {visiblePosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
 
@@ -77,7 +98,9 @@ function PostsPage() {
 
       <div ref={bottomRef}/>
 
-      {!hasMore && <p className="text-center">You have reached end.</p>}
+      {visiblePosts.length === 0 && <p className="text-center">No results found.</p>}
+
+      {!hasMore && visiblePosts.length !== 0 && <p className="text-center">You have reached end.</p>}
     </div>
   );
 }
