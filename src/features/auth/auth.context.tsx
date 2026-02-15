@@ -1,14 +1,18 @@
 import { createContext, useEffect, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { User, SignInPayload } from './auth.types'
-import { signIn, getMe } from '../../services/auth.api';
+import type { User, SignInPayload, SignUpPayload } from './auth.types'
+import { 
+    signIn as signInService, 
+    signUp as signUpService, 
+    getMe } from '../../services/auth.api';
 
 type AuthContextType = {
     user: User | null;
     isAuthenticated: boolean;
     loading: boolean;
-    signInCxt: (data: SignInPayload) => Promise<void>;
-    signOutCxt: () => void;
+    signUp: (data: SignUpPayload) => Promise<void>;
+    signIn: (data: SignInPayload) => Promise<void>;
+    signOut: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -19,19 +23,31 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
 
     const isAuthenticated = !!user;
 
-    const signInCxt = async (data: SignInPayload) => {
+    const signUp = async (data: SignUpPayload) => {
         setLoading(true);
         try {
-            const res = await signIn(data);
-            localStorage.setItem("token", res.data.token);
-            setUser(res.data.user);
+            await signUpService(data);
+        } catch(err: any) {
+            throw err;
         } finally {
             setLoading(false);
         }
     }
 
-    const signOutCxt = () => {
-        console.log("token removed by signOutCxt");
+    const signIn = async (data: SignInPayload) => {
+        setLoading(true);
+        try {
+            const res = await signInService(data);
+            localStorage.setItem("token", res.data.token);
+            setUser(res.data.user);
+        } catch(err: any) {
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const signOut = () => {
         localStorage.removeItem("token");
         setUser(null);
     }
@@ -48,12 +64,12 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
         .then(res => {
             setUser(res.data.user)
         })
-        .catch(() => signOutCxt())
+        .catch(() => signOut())
         .finally(() => setLoading(false));
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, loading, signInCxt, signOutCxt }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, loading, signUp, signIn, signOut }}>
             {children}
         </AuthContext.Provider>
     )
