@@ -61,7 +61,7 @@ function ChangePassword() {
 
         setShowPasswordFields(false);
       }
-    } catch (err) {
+    } catch (err: any) {
       const msg = err.message;
       setValidationError(msg);
     } finally {
