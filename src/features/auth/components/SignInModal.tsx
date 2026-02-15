@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BaseModal from '../../../components/BaseModal';
 import type { SignInPayload } from '../auth.types';
 
@@ -6,6 +7,8 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   onSubmit?: (data: SignInPayload) => void;
+  errorMsg: string;
+  setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface FormErrors {
@@ -13,13 +16,14 @@ interface FormErrors {
   password?: string;
 }
 
-export default function SignInModal({ isOpen, onClose, onSubmit }: Props) {
+export default function SignInModal({ isOpen, onClose, onSubmit, errorMsg, setErrorMsg }: Props) {
   const [formData, setFormData] = useState<SignInPayload>({
     email: '',
     password: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -55,6 +59,8 @@ export default function SignInModal({ isOpen, onClose, onSubmit }: Props) {
         [name]: undefined,
       }));
     }
+
+    setErrorMsg("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -84,10 +90,7 @@ export default function SignInModal({ isOpen, onClose, onSubmit }: Props) {
       title="Sign In"
       onClose={onClose}
       footer={
-        <div className="flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-sm">
-            Cancel
-          </button>
+        <div className="flex items-center gap-3 flex-col">
           <button
             disabled={isSubmitting}
             onClick={handleSubmit}
@@ -95,6 +98,7 @@ export default function SignInModal({ isOpen, onClose, onSubmit }: Props) {
           >
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
+            <p className='text-gray-500 text-[14px] text-center'>Don't have an account? <span className='text-blue-700 underline underline-offset-3 cursor-pointer' onClick={() => navigate("/signup")}>Sign Up</span></p>
         </div>
       }
     >
@@ -124,6 +128,9 @@ export default function SignInModal({ isOpen, onClose, onSubmit }: Props) {
           />
           {errors.password && (
             <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+          )}
+          {errorMsg && (
+            <p className="text-sm text-red-500 mt-1">{errorMsg}</p>
           )}
         </div>
       </form>

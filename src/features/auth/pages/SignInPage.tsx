@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignInModal from '../components/SignInModal';
-import { signIn } from '../../../services/auth.api';
 import type { SignInPayload } from '../auth.types';
+import { useAuth } from '../auth.context';
 
 export default function SignInPage() {
-  const navigate = useNavigate();
   const [isOpen] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
+  const { signIn } = useAuth();
 
   const handleClose = () => {
     navigate('/');
@@ -14,12 +16,12 @@ export default function SignInPage() {
 
   const handleSubmit = async (data: SignInPayload) => {
     try {
-      const response = await signIn(data);
-        const token = response.data.jwt;
-        localStorage.setItem("token", token);
-        navigate('/');
-    } catch (error) {
-      console.error('Sign in failed:', error);
+      setErrorMsg("");
+      await signIn(data);
+      navigate('/');
+    } catch (err: any) {
+      const msg = err?.message || 'Inavlid credentials';
+      setErrorMsg(msg);
     }
   };
 
@@ -28,6 +30,8 @@ export default function SignInPage() {
       isOpen={isOpen}
       onClose={handleClose}
       onSubmit={handleSubmit}
+      errorMsg={errorMsg}
+      setErrorMsg={setErrorMsg}
     />
   );
 }
