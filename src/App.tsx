@@ -1,12 +1,16 @@
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import CreatePostButton from './features/posts/components/CreatePostButton';
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <>
-      <div className="text-4xl font-mono font-bold">
-        <h1>Inside <span className="text-blue-500">{"<"}Div{"/>"}</span> tag</h1>
-        <h3 className="text-2xl font-medium">Manish Bobburi</h3>
-      </div>
+    <Navbar setSearchQuery={setSearchQuery} searchQuery={searchQuery}/>
+    <Outlet context={{ searchQuery }}/>
+    <CreatePostButton />
     </>
   )
 }

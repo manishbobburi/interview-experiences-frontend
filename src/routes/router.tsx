@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
                 element: <SignUpPage />,
             },
             {
-                path: "user/:user_name",
+                path: "user/:userId",
                 element: <UserProfilePage />,
             },
             {
