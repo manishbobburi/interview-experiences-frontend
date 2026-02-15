@@ -7,12 +7,12 @@ interface NavItemProps {
 }
 
 function NavItem({ onItemClick }: NavItemProps) {
-  const { user, isAuthenticated, signOutCxt } = useAuth();
+  const { user, isAuthenticated, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleAction = (path: string, isLogout: boolean = false) => {
     if (isLogout) {
-      signOutCxt();
+      signOut();
       navigate("/signin")
     } else {
       navigate(path);
