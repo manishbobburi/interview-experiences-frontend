@@ -7,6 +7,8 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   onSubmit?: (data: SignUpPayload) => void;
+  errorMsg: string;
+  setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface FormErrors {
@@ -15,7 +17,7 @@ interface FormErrors {
   password?: string;
 }
 
-export default function SignUpModal({ isOpen, onClose, onSubmit }: Props) {
+export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setErrorMsg }: Props) {
   const [formData, setFormData] = useState<SignUpPayload>({
     name: '',
     email: '',
@@ -43,8 +45,8 @@ export default function SignUpModal({ isOpen, onClose, onSubmit }: Props) {
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(formData.password)) {
+      newErrors.password = 'Password must be at least 8 characters and include letters & numbers';
     }
 
     setErrors(newErrors);
@@ -66,6 +68,7 @@ export default function SignUpModal({ isOpen, onClose, onSubmit }: Props) {
         [name]: undefined,
       }));
     }
+    setErrorMsg("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -80,7 +83,6 @@ export default function SignUpModal({ isOpen, onClose, onSubmit }: Props) {
       if (onSubmit) {
         await onSubmit(formData);
       }
-      setFormData({ name: '', email: '', password: '' });
       setErrors({});
     } catch (error) {
       console.error('Sign up error:', error);
@@ -147,6 +149,9 @@ export default function SignUpModal({ isOpen, onClose, onSubmit }: Props) {
           />
           {errors.password && (
             <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+          )}
+          {errorMsg && (
+            <p className="text-sm text-red-500 mt-1">{errorMsg}</p>
           )}
         </div>
       </form>

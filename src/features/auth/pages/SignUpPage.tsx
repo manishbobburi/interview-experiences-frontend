@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SignUpModal from '../components/SignUpModal';
-import { signUp } from '../../../services/auth.api';
+import { useAuth } from '../auth.context';
 import type { SignUpPayload } from '../auth.types';
-import { handleComponentError } from '../../../utils/componentErrorHandler';
+import SignUpModal from '../components/SignUpModal';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
   const [isOpen] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
+  const { signUp } = useAuth();
 
   const handleClose = () => {
     navigate('/');
@@ -15,12 +16,13 @@ export default function SignUpPage() {
 
   const handleSubmit = async (data: SignUpPayload) => {
     try {
+      setErrorMsg("");
       await signUp(data);
       navigate('/');
-      return;
     } catch (err: any) {
-        handleComponentError(err, navigate);
-        return;
+      const msg = err?.message || 'Inavlid credentials';
+      setErrorMsg(msg);
+      return;
     }
   };
 
@@ -29,6 +31,8 @@ export default function SignUpPage() {
       isOpen={isOpen}
       onClose={handleClose}
       onSubmit={handleSubmit}
+      errorMsg={errorMsg}
+      setErrorMsg={setErrorMsg}
     />
   );
 }
