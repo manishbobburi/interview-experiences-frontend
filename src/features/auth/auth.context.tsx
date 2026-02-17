@@ -1,6 +1,8 @@
 import { createContext, useEffect, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { User, SignInPayload, SignUpPayload } from './auth.types'
+import type { User, SignInPayload, SignUpPayload, AuthResponse } from './auth.types'
+import type { ApiResponse} from '../../types/api.types';
+
 import { 
     signIn as signInService, 
     signUp as signUpService, 
@@ -11,7 +13,7 @@ type AuthContextType = {
     isAuthenticated: boolean;
     loading: boolean;
     signUp: (data: SignUpPayload) => Promise<void>;
-    signIn: (data: SignInPayload) => Promise<void>;
+    signIn: (data: SignInPayload) => Promise<ApiResponse<AuthResponse>>;
     signOut: () => void;
 }
 
@@ -40,6 +42,7 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
             const res = await signInService(data);
             localStorage.setItem("token", res.data.token);
             setUser(res.data.user);
+            return res;
         } catch(err: any) {
             throw err;
         } finally {

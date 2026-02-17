@@ -4,9 +4,11 @@ import Button from "../../../components/Button";
 import EditableField from "./EditableField";
 import ChangePassword from './ChangePassword';
 import { changeUserDetails } from "../../../services/user/user.api";
+import { useToast } from "../../../context/ToastContext";
 
 function UserDetails() {
   const { user } = useAuth();
+  const { showToast } = useToast();
 
   const [userDetails, setUserDetails] = useState({
     userId: user?.id,
@@ -77,6 +79,7 @@ function UserDetails() {
 
       if (response.success) {
         setEditing({ name: false, email: false });
+        showToast("Saved changes successfully");
         return;
       } else {
         console.log("Update failed", response);
