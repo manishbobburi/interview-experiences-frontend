@@ -89,7 +89,7 @@ function PostsPage() {
   if (posts.length === 0) return <div>No posts found.</div>;
 
   return (
-    <div className="pt-15">
+    <div className="pt-16 px-4 sm:px-6 md:px-10 lg:px-14">
       {visiblePosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
