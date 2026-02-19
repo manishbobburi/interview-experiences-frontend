@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import NavItem from "./NavItem";
 import SearchBar from "./SearchBar";
 import type { SearchContextType } from "../types/search.types";
+import Logo from "/Logo.svg";
 
 function Navbar({ searchQuery, setSearchQuery }: SearchContextType) {
   const [open, setOpen] = useState(false);
@@ -13,9 +14,9 @@ function Navbar({ searchQuery, setSearchQuery }: SearchContextType) {
     <nav className="fixed w-full h-14 rounded-xl border-b z-50 border-gray-200 bg-white/50 backdrop-blur-sm">
       <div className="max-w-8xl px-4 sm:px-8 h-full gap-x-2 flex items-center justify-between">
         <div
-          className="font-semibold text-lg cursor-pointer"
+          className="font-semibold max-w-4 cursor-pointer"
           onClick={() => navigate("/")}>
-          PEX
+          <img src={Logo} alt="Logo" />
         </div>
 
         <div className="flex-1 flex justify-end px-6 ">
