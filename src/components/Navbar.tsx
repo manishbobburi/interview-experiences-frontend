@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavItem from "./NavItem";
 import SearchBar from "./SearchBar";
 import type { SearchContextType } from "../types/search.types";
@@ -9,6 +9,9 @@ import Logo from "/Logo.svg";
 function Navbar({ searchQuery, setSearchQuery }: SearchContextType) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const inFeed = location.pathname === "/";
 
   return (
     <nav className="fixed w-full h-14 rounded-xl border-b z-50 border-gray-200 bg-white/50 backdrop-blur-sm">
@@ -20,7 +23,9 @@ function Navbar({ searchQuery, setSearchQuery }: SearchContextType) {
         </div>
 
         <div className="flex-1 flex justify-end px-6 ">
-          <SearchBar setSearchQuery={setSearchQuery} searchQuery={searchQuery}/>
+          { inFeed && 
+            <SearchBar setSearchQuery={setSearchQuery} searchQuery={searchQuery}/>
+          }
         </div>
 
         <div className="hidden sm:flex items-center space-x-3">
