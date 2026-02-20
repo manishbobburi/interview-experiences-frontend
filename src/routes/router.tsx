@@ -8,6 +8,7 @@ import SignUpPage from '../features/auth/pages/SignUpPage';
 import { Offline, ServerError, NotFound } from '../pages'
 import CreatePostModal from '../features/posts/components/CreatePostModal';
 import UserProfilePage from '../features/user/pages/UserProfilePage';
+import PostDetailPage from '../features/posts/pages/PostDetail';
 
 export const router = createBrowserRouter([
     {
@@ -27,12 +28,16 @@ export const router = createBrowserRouter([
                 element: <UserProfilePage />,
             },
             {
+                index: true,
+                element: <PostsPage />,
+                loader: postsLoader,
+            },
+            {
                 element: <ProtectedRoutes />,
                 children: [
                     {
-                        index: true,
-                        element: <PostsPage />,
-                        loader: postsLoader,
+                        path: "post/:id",
+                        element: <PostDetailPage />
                     },
                     {
                         path: "post",
