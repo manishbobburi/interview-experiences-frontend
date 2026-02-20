@@ -1,4 +1,4 @@
-type Difficulty =
+export type Difficulty =
   | 'Easy'
   | 'Easy_Medium'
   | 'Medium'
@@ -16,7 +16,7 @@ export type PostProps = {
   userId: number;
   company: string;
   role: string;
-  overallDifficulty: Difficulty;
+  overallDifficulty: number;
   body: string;
   upvotes: number;
   downvotes: number;

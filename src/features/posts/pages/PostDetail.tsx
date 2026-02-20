@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Card from "../../../components/Card";
 import type { PostProps } from "../post.types";
+import { mapDifficulty } from "../../../utils/difficulty";
 import { getPostById } from "../../../services/posts.api";
+import DifficultyBadge from "../../../components/DifficultyBadge";
+
 
 export default function PostDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -81,6 +84,7 @@ export default function PostDetailPage() {
           </div>
 
           <div className="flex items-center gap-3 mb-6">
+            <DifficultyBadge level={mapDifficulty(post.overallDifficulty).value} />
             <span className="text-xs text-gray-400">
               {displayAuthor} · {formattedDate}
             </span>
