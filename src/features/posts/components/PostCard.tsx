@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { EllipsisVertical } from "lucide-react";
 import Card from "../../../components/Card";
 import type { PostProps } from "../post.types";
@@ -17,9 +18,10 @@ export default function PostCard({ post }: PostCardProps) {
   const [isClicked, setIsClicked] = useState(false);
   const createdAt = timeAgo(post.createdAt);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   return (
-    <Card className="my-4">
+    <Card className="my-4 cursor-pointer" onClick={() => navigate(`/post/${post.id}`)}>
       <div className="flex justify-between items-start">
         <div>
           <h2 className="font-semibold text-lg">{post.company}</h2>
