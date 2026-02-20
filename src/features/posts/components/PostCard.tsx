@@ -9,6 +9,7 @@ import { useAuth } from "../../auth/auth.context";
 import DropDown from "../../../components/DropDown";
 import { deletePost } from '../../../services/posts.api';
 import DifficultyBadge from "../../../components/DifficultyBadge";
+import { mapDifficulty } from "../../../utils/difficulty";
 
 type PostCardProps = {
   post: PostProps;
@@ -26,12 +27,13 @@ export default function PostCard({ post }: PostCardProps) {
         <div>
           <h2 className="font-semibold text-lg">{post.company}</h2>
           <p className="text-sm text-gray-500">{post.role}</p>
+          <div className="mt-1.5">
+            <DifficultyBadge level={mapDifficulty(post.overallDifficulty).value} />
+          </div>
         </div>
 
-        <DifficultyBadge level={post.overallDifficulty} />
-
         {user?.id === post.userId && (
-          <div className="relative">
+          <div className="relative"  onClick={(e) => e.stopPropagation()}>
             <Button
               variant="ghost"
               size="sm"
