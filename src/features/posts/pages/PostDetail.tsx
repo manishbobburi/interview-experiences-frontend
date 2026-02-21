@@ -69,7 +69,7 @@ export default function PostDetailPage() {
 return (
   <div className="min-h-screen bg-white pt-14">
     <main className="max-w-3xl mx-auto px-4 py-8">
-      <Card className="p-6">
+      <Card className="py-6">
         <div className="flex">
 
           <div className="w-10 -ml-2 mr-2">
@@ -86,7 +86,7 @@ return (
                 {post.role}
               </p>
 
-              <div className="flex items-center gap-3 mt-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
                 <DifficultyBadge
                   level={mapDifficulty(post.overallDifficulty).value}
                 />

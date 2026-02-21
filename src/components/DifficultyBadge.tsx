@@ -15,8 +15,10 @@ const colors: Record<Difficulty, string> = {
 
 export default function DifficultyBadge({ level }: DifficultyBadgeProps) {
   return (
-    <span className={`text-xs font-medium px-2 py-1 rounded-full ${colors[level]}`}>
-      {DIFFICULTY_LABELS[level]}
-    </span>
+    <span
+  className={`inline-flex items-center whitespace-nowrap text-xs font-medium px-3 py-1 rounded-full ${colors[level]}`}
+>
+  {DIFFICULTY_LABELS[level]}
+</span>
   );
 }
