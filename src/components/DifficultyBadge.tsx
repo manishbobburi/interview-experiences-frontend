@@ -6,11 +6,11 @@ type DifficultyBadgeProps = {
 };
 
 const colors: Record<Difficulty, string> = {
-  Easy:        "bg-green-100 text-green-700",
+  Easy:        "bg-green-200 text-green-700",
   Easy_Medium: "bg-green-300 text-green-800",
-  Medium:      "bg-yellow-100 text-yellow-700",
+  Medium:      "bg-yellow-200 text-yellow-700",
   Medium_Hard: "bg-orange-300 text-orange-800",
-  Hard:        "bg-red-100 text-red-700",
+  Hard:        "bg-red-200 text-red-700",
 };
 
 export default function DifficultyBadge({ level }: DifficultyBadgeProps) {
