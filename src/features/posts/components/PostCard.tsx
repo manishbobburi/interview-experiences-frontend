@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useMatch } from "react-router-dom";
 import { EllipsisVertical } from "lucide-react";
 import Card from "../../../components/Card";
 import type { PostProps } from "../post.types";
@@ -20,6 +20,8 @@ export default function PostCard({ post }: PostCardProps) {
   const createdAt = timeAgo(post.createdAt);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const match = useMatch("/user/:id");
+  const inProfile = Boolean(match);
 
   return (
     <Card className="my-4 cursor-pointer" onClick={() => navigate(`/post/${post.id}`)}>
@@ -32,7 +34,7 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
         </div>
 
-        {user?.id === post.userId && (
+        {inProfile && (user?.id === post.userId) && (
           <div className="relative"  onClick={(e) => e.stopPropagation()}>
             <Button
               variant="ghost"
@@ -45,7 +47,7 @@ export default function PostCard({ post }: PostCardProps) {
 
             {isClicked && <DropDown onClose={() => setIsClicked(false)} onDelete={async () => {
              await  deletePost(post.id)
-            }} onEdit={() => console.log("Clicked Edit")}/>}
+            }}/>}
           </div>
         )}
       </div>
