@@ -13,7 +13,7 @@ export default function PostDetailPage() {
   const navigate = useNavigate();
 
   const [post, setPost] = useState<PostProps | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -78,15 +78,24 @@ return (
 
           <div className="flex-1">
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900">
-                {post.company}
-              </h1>
+              <div className="flex items-center gap-2 leading-none">
+                <div className="w-8 h-8 shrink-0 flex items-center justify-center">
+                  <img
+                    src={post.company.logoUrl}
+                    alt={post.company.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <h1 className="text-xl font-semibold text-gray-900">
+                  {post.company.name}
+                </h1>
+              </div>
 
               <p className="text-sm text-gray-500 mt-1">
                 {post.role}
               </p>
 
-              <div className="flex flex-col pt-2 sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 pt-2">
                 <DifficultyBadge
                   level={mapDifficulty(post.overallDifficulty).value}
                 />
