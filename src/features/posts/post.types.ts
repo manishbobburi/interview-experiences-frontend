@@ -14,7 +14,7 @@ export type Cursor = {
 export type PostProps = {
   id: number;
   userId: number;
-  company: string;
+  companyId: number;
   role: string;
   overallDifficulty: number;
   body: string;
@@ -24,7 +24,8 @@ export type PostProps = {
   isAnonymous: boolean;
   createdAt: string;
   displayName: string;
-  user?: userObj;
+  user?: User;
+  company: Company;
 };
 
 export type PaginatedPosts = {
@@ -35,13 +36,19 @@ export type PaginatedPosts = {
 
 export interface CreatePostPayload {
   userId: number | undefined;
-  company: string;
+  companyId: number;
   role: string;
   difficulty: Difficulty;
   summary: string;
   isAnonymous: boolean;
 }
 
-type userObj = {
+interface User {
   name: string;
+}
+
+export interface Company {
+  id: number;
+  name: string;
+  logoUrl: string;
 }
