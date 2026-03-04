@@ -56,7 +56,7 @@ function PostsPage() {
     const q = debouncedSearch.toLowerCase();
 
     return posts.filter(p => 
-      p.company.toLowerCase().includes(q) || p.role.toLowerCase().includes(q)
+      p.company.name.toLowerCase().includes(q) || p.role.toLowerCase().includes(q)
     )
   }, [posts, debouncedSearch])
 

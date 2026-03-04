@@ -26,11 +26,26 @@ export default function PostCard({ post }: PostCardProps) {
   return (
     <Card className="my-4 cursor-pointer" onClick={() => navigate(`/post/${post.id}`)}>
       <div className="flex justify-between items-start">
-        <div>
-          <h2 className="font-semibold text-lg">{post.company}</h2>
-          <p className="text-sm text-gray-500">{post.role}</p>
-          <div className="mt-1.5">
-            <DifficultyBadge level={mapDifficulty(post.overallDifficulty).value} />
+        <div className="flex flex-col items-start">
+          <div className="flex items-center gap-2">
+            <img
+              src={post.company.logoUrl}
+              alt={post.company.name}
+              className="w-6 h-6 object-contain shrink-0"
+            />
+            <h2 className="text-xl font-semibold text-gray-900 leading-tight">
+              {post.company.name}
+            </h2>
+          </div>
+
+          <p className="text-sm text-gray-500 font-medium mt-0.5">
+            {post.role}
+          </p>
+
+          <div className="mt-2">
+            <DifficultyBadge
+              level={mapDifficulty(post.overallDifficulty).value}
+            />
           </div>
         </div>
 

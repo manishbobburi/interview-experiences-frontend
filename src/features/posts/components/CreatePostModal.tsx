@@ -5,6 +5,8 @@ import { useAuth } from "../../auth/auth.context";
 import BaseModal from "../../../components/BaseModal";
 import type { CreatePostPayload } from "../post.types";
 import { createPost } from "../../../services/posts.api";
+import type { Company } from "../post.types";
+import CompanySearch from "./CompanySearch";
 
 interface FormErrors {
   company?: string;
@@ -18,7 +20,7 @@ export default function CreatePostModal() {
   const { user } = useAuth();
   
   const [form, setForm] = useState<Omit<CreatePostPayload, "userId">>({
-    company: "",
+    companyId: 0,
     role: "",
     difficulty: "Easy",
     summary: "",
@@ -31,8 +33,8 @@ export default function CreatePostModal() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!form.company || form.company.trim().length < 2) {
-      newErrors.company = "Company name must be at least 2 characters";
+    if (!form.companyId || form.companyId == 0) {
+      newErrors.company = "Company name is required";
     }
 
     if (!form.role || form.role.trim().length < 2) {
@@ -52,7 +54,7 @@ export default function CreatePostModal() {
   };
 
   const onClose = () => {
-    navigate(-1); // goes one entry back in the browser's navigation history.
+    navigate(-1);
   };
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -107,17 +109,23 @@ export default function CreatePostModal() {
   }));
   };
 
+  const handleCompanySelect = (company: Company) => {
+  setForm(prev => ({
+    ...prev,
+    companyId: company.id,
+  }));
+
+  setErrors(prev => ({
+    ...prev,
+    company: undefined,
+  }));
+};
+
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} title="Create Post">
       <form onSubmit={onSubmit} className="space-y-3">
         <div>
-          <input
-          name="company"
-          value={form.company}
-          className="w-full border p-2"
-          placeholder="Company"
-          onChange={handleChange}
-          />
+          <CompanySearch handleSelect={handleCompanySelect}/>
           {errors.company && (
             <p className="text-sm text-red-500 mt-1">{errors.company}</p>
           )}
