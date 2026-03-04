@@ -95,7 +95,7 @@ return (
                 {post.role}
               </p>
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 pt-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 pt-2">
                 <DifficultyBadge
                   level={mapDifficulty(post.overallDifficulty).value}
                 />
