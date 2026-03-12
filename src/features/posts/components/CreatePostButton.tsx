@@ -1,26 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 
-import { useAuth } from "../../auth/auth.context";
-
 function CreatePostButton() {
   const navigate = useNavigate();
-  const { user } = useAuth();
-
-  const isPoster = user?.role === "poster";
 
   const handleCreate = () => {
-    if (user?.role !== "poster") {
-      console.warn("Unauthorized");
-      return;
-    }
-
     navigate("/post");
   };
 
   return (
     <>
-      {isPoster && (
+      {(
         <button
           onClick={handleCreate}
           className="
