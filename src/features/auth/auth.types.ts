@@ -9,12 +9,17 @@ export interface SignUpPayload {
   password: string;
 }
 
+interface Role {
+  name: "USER" | "ADMIN";
+}
+
 export interface User {
   id: number;
   name: string;
   email: string;
-  role: "viewer" | "poster";
+  roleId: number;
   verified: boolean;
+  role: Role;
 }
 
 export interface AuthResponse {

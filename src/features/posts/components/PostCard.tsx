@@ -10,6 +10,7 @@ import DropDown from "../../../components/DropDown";
 import { deletePost } from '../../../services/posts.api';
 import DifficultyBadge from "../../../components/DifficultyBadge";
 import { mapDifficulty } from "../../../utils/difficulty";
+import { hasRole } from "../../../utils/hasRole";
 
 type PostCardProps = {
   post: PostProps;
@@ -22,6 +23,9 @@ export default function PostCard({ post }: PostCardProps) {
   const navigate = useNavigate();
   const match = useMatch("/user/:id");
   const inProfile = Boolean(match);
+  const isAdmin = hasRole(user, ["ADMIN"]);
+
+/* isOwner  need to be added*/
 
   return (
     <Card className="my-4 cursor-pointer" onClick={() => navigate(`/post/${post.id}`)}>
@@ -49,7 +53,7 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
         </div>
 
-        {inProfile && (user?.id === post.userId) && (
+        {(inProfile || isAdmin) && (
           <div className="relative"  onClick={(e) => e.stopPropagation()}>
             <Button
               variant="ghost"
