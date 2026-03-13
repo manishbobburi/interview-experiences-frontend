@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { Company } from "../post.types";
 import { getCompanies } from "../../../services/company.api";
+import { getAssetUrl } from "../../../utils/getAssetUrl";
 
 interface CompanySearchProps {
   handleSelect: (company: Company) => void;
@@ -63,7 +64,7 @@ export default function CompanySearch({ handleSelect }: CompanySearchProps) {
               className="flex items-center gap-x-1 p-2 hover:bg-gray-100 cursor-pointer border border-gray-300 rounded m-0.5"
             >
               <div className="w-5 h-5">
-                <img src={company.logoUrl} alt="" className="w-full h-full object-contain"/>
+                <img src={getAssetUrl(company.logoPath)} alt={company.name} loading="lazy" className="w-full h-full object-contain"/>
               </div>
               {company.name}
             </li>

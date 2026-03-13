@@ -11,6 +11,7 @@ import { deletePost } from '../../../services/posts.api';
 import DifficultyBadge from "../../../components/DifficultyBadge";
 import { mapDifficulty } from "../../../utils/difficulty";
 import { hasRole } from "../../../utils/hasRole";
+import { getAssetUrl } from "../../../utils/getAssetUrl";
 
 type PostCardProps = {
   post: PostProps;
@@ -33,8 +34,9 @@ export default function PostCard({ post }: PostCardProps) {
         <div className="flex flex-col items-start">
           <div className="flex items-center gap-2">
             <img
-              src={post.company.logoUrl}
+              src={getAssetUrl(post.company.logoPath)}
               alt={post.company.name}
+              loading="lazy"
               className="w-6 h-6 object-contain shrink-0"
             />
             <h2 className="text-xl font-semibold text-gray-900 leading-tight">
