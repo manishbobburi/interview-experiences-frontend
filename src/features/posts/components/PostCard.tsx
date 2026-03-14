@@ -29,7 +29,7 @@ export default function PostCard({ post }: PostCardProps) {
 /* isOwner  need to be added*/
 
   return (
-    <Card className="my-4 cursor-pointer" onClick={() => navigate(`/post/${post.id}`)}>
+    <Card className="my-4 cursor-pointer" onClick={() => navigate(`/post/${post.slug}`)}>
       <div className="flex justify-between items-start">
         <div className="flex flex-col items-start">
           <div className="flex items-center gap-2">

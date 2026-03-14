@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
                 element: <ProtectedRoutes />,
                 children: [
                     {
-                        path: "post/:id",
+                        path: "post/:slug",
                         element: <PostDetailPage />
                     },
                     {

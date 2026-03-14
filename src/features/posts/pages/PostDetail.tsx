@@ -3,14 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import Card from "../../../components/Card";
 import type { PostProps } from "../post.types";
 import { mapDifficulty } from "../../../utils/difficulty";
-import { getPostById } from "../../../services/posts.api";
+import { getPostBySlug } from "../../../services/posts.api";
 import DifficultyBadge from "../../../components/DifficultyBadge";
 import BackButton from "../../../components/BackButton";
 import { getAssetUrl } from "../../../utils/getAssetUrl";
 
 
 export default function PostDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
 
   const [post, setPost] = useState<PostProps | null>(null);
@@ -18,11 +18,11 @@ export default function PostDetailPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    if (!slug) return;
 
     const loadPost = async () => {
       setLoading(true);
-      const res = await getPostById(Number(id));
+      const res = await getPostBySlug(slug);
       if (res.success) {
         setPost(res.data);
       } else {
@@ -32,7 +32,7 @@ export default function PostDetailPage() {
     };
 
     loadPost();
-  }, [id]);
+  }, [slug]);
 
 
   if (loading) {
