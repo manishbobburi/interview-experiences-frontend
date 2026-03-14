@@ -11,8 +11,8 @@ export const getPosts = async (cursor?: Cursor): Promise<ApiResponse<PaginatedPo
   return await api.get('/posts', { params });
 };
 
-export const getPostById = async (id: number): Promise<ApiResponse<PostProps>> => {
-  return await api.get(`/posts/${id}`);
+export const getPostBySlug = async (slug: string): Promise<ApiResponse<PostProps>> => {
+  return await api.get(`/posts/${slug}`);
 }
 
 export const getPostsByUserName = async (userId: number): Promise<ApiResponse<PostProps[]>> => {

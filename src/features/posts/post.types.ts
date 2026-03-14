@@ -26,6 +26,7 @@ export type PostProps = {
   displayName: string;
   user?: User;
   company: Company;
+  slug: string;
 };
 
 export type PaginatedPosts = {
