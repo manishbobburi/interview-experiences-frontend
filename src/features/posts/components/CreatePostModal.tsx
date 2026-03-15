@@ -129,7 +129,7 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
 };
 
   return (
-    <div className="fixed inset-0 top-16 z-50 flex items-start justify-center overflow-y-auto bg-gray-50/80 backdrop-blur-sm px-4 py-6 sm:py-10">
+    <div className="fixed inset-0 top-16 z-40 flex items-start justify-center overflow-y-auto bg-gray-50/80 backdrop-blur-sm px-4 py-6 sm:py-10">
       <div
         className="w-full max-w-2xl bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col overflow-hidden"
         style={{ minHeight: "calc(100vh - 64px - 80px)" }}
