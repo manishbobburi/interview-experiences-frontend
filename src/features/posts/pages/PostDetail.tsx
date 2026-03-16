@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import DOMPurify from "dompurify";
 import Card from "../../../components/Card";
 import type { PostProps } from "../post.types";
 import { mapDifficulty } from "../../../utils/difficulty";
@@ -108,9 +109,19 @@ return (
 
             <hr className="border-gray-100 my-6" />
 
-            <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-              {post.body}
-            </div>
+            <div
+              className="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(post.body, {
+                  ALLOWED_TAGS: [
+                    "p", "br", "strong", "em", "s", "code", "pre",
+                    "h1", "h2", "h3", "h4", "h5", "h6",
+                    "ul", "ol", "li", "blockquote", "a",
+                  ],
+                  ALLOWED_ATTR: ["href", "target", "rel", "class"],
+                }),
+              }}
+            />
           </div>
         </div>
       </Card>
