@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://api.interview-experiences.tech/api/v1/sitemap.xml
