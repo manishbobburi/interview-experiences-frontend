@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useMatch } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { EllipsisVertical } from "lucide-react";
 import Card from "../../../components/Card";
 import type { PostProps } from "../post.types";
@@ -27,6 +28,15 @@ export default function PostCard({ post }: PostCardProps) {
   const isAdmin = hasRole(user, ["ADMIN"]);
 
 /* isOwner  need to be added*/
+
+  const stripHtml = (html: string) => {
+    const temp = document.createElement("div");
+    temp.innerHTML = DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: [],
+      ALLOWED_ATTR: [],
+    });
+    return temp.textContent || temp.innerText || "";
+  };
 
   return (
     <Card className="my-4 cursor-pointer" onClick={() => navigate(`/post/${post.slug}`)}>
@@ -74,7 +84,7 @@ export default function PostCard({ post }: PostCardProps) {
       </div>
 
       <p className="text-sm text-gray-700 mt-3 line-clamp-3">
-        {post.body || "N/A"}
+        {stripHtml(post.body)}
       </p>
 
       <div className="flex justify-end items-center text-sm text-gray-500 mt-4">
