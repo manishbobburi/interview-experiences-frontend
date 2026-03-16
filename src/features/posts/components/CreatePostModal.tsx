@@ -6,6 +6,7 @@ import type { CreatePostPayload } from "../post.types";
 import { createPost } from "../../../services/posts.api";
 import type { Company } from "../post.types";
 import CompanySearch from "./CompanySearch";
+import RichTextEditor from "./RichTextEditor";
 
 interface FormErrors {
   company?: string;
@@ -119,6 +120,11 @@ export default function CreatePostModal() {
   }));
 };
 
+const handleSummaryChange = (value: string) => {
+  setForm((prev) => ({ ...prev, summary: value}));
+  setErrors((prev) => ({...prev, summary: undefined}));
+}
+
 const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
   if (
     e.key === "Enter" &&
@@ -199,13 +205,14 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
             <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
               Interview Summary
             </label>
-            <textarea
-              name="summary"
-              value={form.summary}
-              onChange={handleChange}
-              placeholder="Describe the interview rounds, questions asked, atmosphere, tips for others…"
-              className="flex-1 w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 leading-relaxed resize-none focus:outline-none focus:border-gray-400 transition min-h-45"
-            />
+            <div className="flex-1 flex flex-col min-h-0">
+              <RichTextEditor
+                value={form.summary}
+                onChange={handleSummaryChange}
+                placeholder="Describe the interview rounds, questions asked, atmosphere, tips for others…"
+                hasError={!!errors.summary}
+              />
+            </div>
             {errors.summary && (
               <p className="text-xs text-red-500">{errors.summary}</p>
             )}
