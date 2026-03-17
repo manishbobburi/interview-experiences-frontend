@@ -70,62 +70,63 @@ export default function PostDetailPage() {
 
 return (
   <div className="min-h-screen bg-white pt-14">
-    <main className="max-w-3xl mx-auto px-4 py-8">
-      <Card className="py-6">
-        <div className="flex">
+  <main className="max-w-3xl mx-auto px-4 py-8">
+    <Card className="py-6">
+      <div className="flex">
 
-          <div className="w-10 -ml-2 mr-2">
-            <BackButton />
-          </div>
+        <div className="w-10 -ml-2 mr-2 shrink-0">
+          <BackButton />
+        </div>
 
-          <div className="flex-1">
-            <div>
-              <div className="flex items-center gap-2 leading-none">
-                <div className="w-8 h-8 shrink-0 flex items-center justify-center">
-                  <img
-                    src={getAssetUrl(post.company.logoPath)}
-                    alt={post.company.name}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <h1 className="text-xl font-semibold text-gray-900">
-                  {post.company.name}
-                </h1>
-              </div>
-
-              <p className="text-sm text-gray-500 mt-1">
-                {post.role}
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 pt-2">
-                <DifficultyBadge
-                  level={mapDifficulty(post.overallDifficulty).value}
+        <div className="flex-1 min-w-0">
+          <div>
+            <div className="flex items-center gap-2 leading-none">
+              <div className="w-8 h-8 shrink-0 flex items-center justify-center">
+                <img
+                  src={getAssetUrl(post.company.logoPath)}
+                  alt={post.company.name}
+                  className="w-full h-full object-contain"
                 />
-                <span className="text-xs text-gray-400">
-                  {displayAuthor} · {formattedDate}
-                </span>
               </div>
+              <h1 className="text-xl font-semibold text-gray-900">
+                {post.company.name}
+              </h1>
             </div>
 
-            <hr className="border-gray-100 my-6" />
+            <p className="text-sm text-gray-500 mt-1">
+              {post.role}
+            </p>
 
-            <div
-              className="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(post.body, {
-                  ALLOWED_TAGS: [
-                    "p", "br", "strong", "em", "s", "code", "pre",
-                    "h1", "h2", "h3", "h4", "h5", "h6",
-                    "ul", "ol", "li", "blockquote", "a",
-                  ],
-                  ALLOWED_ATTR: ["href", "target", "rel", "class"],
-                }),
-              }}
-            />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 pt-2">
+              <DifficultyBadge
+                level={mapDifficulty(post.overallDifficulty).value}
+              />
+              <span className="text-xs text-gray-400">
+                {displayAuthor} · {formattedDate}
+              </span>
+            </div>
           </div>
+
+          <hr className="border-gray-100 my-6" />
+
+          <div
+            className="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none wrap-break-word"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(post.body, {
+                ALLOWED_TAGS: [
+                  "p", "br", "strong", "em", "s", "code", "pre",
+                  "h1", "h2", "h3", "h4", "h5", "h6",
+                  "ul", "ol", "li", "blockquote", "a",
+                ],
+                ALLOWED_ATTR: ["href", "target", "rel", "class"],
+              }),
+            }}
+          />
         </div>
-      </Card>
-    </main>
-  </div>
+      </div>
+    </Card>
+  </main>
+</div>
+
 );
 }
