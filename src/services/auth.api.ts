@@ -13,3 +13,11 @@ export const signUp = async (data: SignUpPayload): Promise<ApiResponse<AuthRespo
 export const getMe = async (): Promise<ApiResponse<AuthResponse>> => {
     return api.get(`/users/me`);
 }
+
+export const verifyEmail = async (token: string): Promise<ApiResponse<null>> => {
+    return api.get(`/auth/verify-email?token=${token}`);
+}
+
+export const resendVerification = async (email: string): Promise<ApiResponse<null>> => {
+    return api.post('/auth/resend-verification', { email });
+}

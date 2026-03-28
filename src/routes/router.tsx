@@ -10,6 +10,8 @@ import CreatePostModal from '../features/posts/components/CreatePostModal';
 import UserProfilePage from '../features/user/pages/UserProfilePage';
 import PostDetailPage from '../features/posts/pages/PostDetail';
 
+import VerifyEmailPage from '../features/auth/pages/VerifyEmailPage';
+
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -22,6 +24,10 @@ export const router = createBrowserRouter([
             {
                 path: "signup",
                 element: <SignUpPage />,
+            },
+            {
+                path: "verify-email",
+                element: <VerifyEmailPage />,
             },
             {
                 path: "user/:userId",
