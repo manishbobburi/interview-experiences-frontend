@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 import { CircleCheck } from 'lucide-react';
 
 type ToastContextType = {
@@ -13,13 +13,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         message: "",
     });
 
-    function showToast(message: string) {
+    const showToast = useCallback((message: string) => {
         setToast({ show: true, message });
 
         setTimeout(() => {
-            setToast({ show: false, message: ""});
+            setToast((prev) => prev.message === message ? { show: false, message: "" } : prev);
         }, 3000);
-    }
+    }, []);
     return (
         <ToastContext.Provider value={{ showToast }}>
             {children}
