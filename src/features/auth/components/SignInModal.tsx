@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BaseModal from '../../../components/BaseModal';
+import Button from '../../../components/Button';
 import type { SignInPayload } from '../auth.types';
 
 interface Props {
@@ -90,15 +91,15 @@ export default function SignInModal({ isOpen, onClose, onSubmit, errorMsg, setEr
       title="Sign In"
       onClose={onClose}
       footer={
-        <div className="flex items-center gap-3 flex-col">
-          <button
+        <div className="flex items-center gap-3 flex-col w-full">
+          <Button
             disabled={isSubmitting}
             onClick={handleSubmit}
-            className="rounded bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
+            variant="primary"
           >
-            {isSubmitting ? 'Signing in...' : 'Sign In'}
-          </button>
-            <p className='text-gray-500 text-[14px] text-center'>Don't have an account? <span className='text-blue-700 underline underline-offset-3 cursor-pointer' onClick={() => navigate("/signup")}>Sign Up</span></p>
+            {isSubmitting ? 'Authenticating...' : 'Sign In'}
+          </Button>
+            <p className='text-gray-500 text-[14px] text-center'>New to Platform? <span className='text-blue-700 underline underline-offset-3 cursor-pointer' onClick={() => navigate("/signup")}>Create an account</span></p>
         </div>
       }
     >
@@ -110,7 +111,7 @@ export default function SignInModal({ isOpen, onClose, onSubmit, errorMsg, setEr
             value={formData.email}
             onChange={handleChange}
             placeholder="Email"
-            className="w-full rounded border p-2"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition"
           />
           {errors.email && (
             <p className="text-sm text-red-500 mt-1">{errors.email}</p>
@@ -124,7 +125,7 @@ export default function SignInModal({ isOpen, onClose, onSubmit, errorMsg, setEr
             value={formData.password}
             onChange={handleChange}
             placeholder="Password"
-            className="w-full rounded border p-2"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition"
           />
           {errors.password && (
             <p className="text-sm text-red-500 mt-1">{errors.password}</p>

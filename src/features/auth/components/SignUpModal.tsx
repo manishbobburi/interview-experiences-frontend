@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BaseModal from '../../../components/BaseModal';
+import Button from '../../../components/Button';
 import type { SignUpPayload } from '../auth.types';
+import { Mail } from 'lucide-react';
 
 interface Props {
   isOpen: boolean;
@@ -9,6 +11,10 @@ interface Props {
   onSubmit?: (data: SignUpPayload) => void;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+  isSuccess?: boolean;
+  submittedEmail?: string;
+  isResending?: boolean;
+  onResend?: () => Promise<void>;
 }
 
 interface FormErrors {
@@ -17,7 +23,7 @@ interface FormErrors {
   password?: string;
 }
 
-export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setErrorMsg }: Props) {
+export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setErrorMsg, isSuccess, submittedEmail, isResending, onResend }: Props) {
   const [formData, setFormData] = useState<SignUpPayload>({
     name: '',
     email: '',
@@ -57,13 +63,13 @@ export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setEr
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev: SignUpPayload) => ({
       ...prev,
       [name]: value,
     }));
 
     if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({ // clear error for this field when user starts typing
+      setErrors((prev: FormErrors) => ({ // clear error for this field when user starts typing
         ...prev,
         [name]: undefined,
       }));
@@ -97,18 +103,47 @@ export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setEr
       title="Create Account"
       onClose={onClose}
       footer={
-          <div className="flex items-center gap-3 flex-col">
-            <button
+          !isSuccess ? (
+          <div className="flex items-center gap-3 flex-col w-full">
+            <Button
               disabled={isSubmitting}
               onClick={handleSubmit}
-              className="rounded bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
+              variant="primary"
             >
-              {isSubmitting ? 'Creating account...' : 'Sign Up'}
-            </button>
-            <p className='text-gray-500 text-[14px] text-center'>Already have an account? <span className='text-blue-700 underline underline-offset-3 cursor-pointer' onClick={() => navigate("/signin")}>Sign In</span></p>
-        </div>
+              {isSubmitting ? 'Provisioning account...' : 'Create Account'}
+            </Button>
+            <p className='text-gray-500 text-[14px] text-center'>Already registered? <span className='text-blue-700 underline underline-offset-3 cursor-pointer' onClick={() => navigate("/signin")}>Sign In</span></p>
+          </div>
+          ) : null
       }
     >
+      {isSuccess ? (
+        <div className="flex flex-col items-center py-4">
+            <div className="w-12 h-12 bg-blue-500/20 text-blue-500 rounded-full flex items-center justify-center mb-4">
+                <Mail size={24} />
+            </div>
+            <h3 className="text-xl font-bold mb-2 text-black">Check your email</h3>
+            <p className="text-center text-gray-500 mb-6 text-sm">
+                We've sent a verification link to <br/><span className="text-black font-medium">{submittedEmail}</span>.
+            </p>
+            <Button 
+                onClick={onResend}
+                disabled={isResending}
+                variant="primary"
+                className="w-full"
+            >
+                {isResending ? "Dispatching..." : "Resend Email"}
+                {isResending ? "Sending..." : "Resend Email"}
+            </Button>
+            <Button 
+                onClick={() => navigate('/signin')}
+                variant="secondary"
+                className="w-full mt-3 border border-gray-200"
+            >
+                Return to Login
+            </Button>
+        </div>
+      ) : (
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
           <input
@@ -117,7 +152,7 @@ export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setEr
             value={formData.name}
             onChange={handleChange}
             placeholder="Full Name"
-            className="w-full rounded border p-2"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition"
           />
           {errors.name && (
             <p className="text-sm text-red-500 mt-1">{errors.name}</p>
@@ -131,7 +166,7 @@ export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setEr
             value={formData.email}
             onChange={handleChange}
             placeholder="Email"
-            className="w-full rounded border p-2"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition"
           />
           {errors.email && (
             <p className="text-sm text-red-500 mt-1">{errors.email}</p>
@@ -145,7 +180,7 @@ export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setEr
             value={formData.password}
             onChange={handleChange}
             placeholder="Password"
-            className="w-full rounded border p-2"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition"
           />
           {errors.password && (
             <p className="text-sm text-red-500 mt-1">{errors.password}</p>
@@ -155,6 +190,7 @@ export default function SignUpModal({ isOpen, onClose, onSubmit, errorMsg, setEr
           )}
         </div>
       </form>
+      )}
     </BaseModal>
   );
 }
