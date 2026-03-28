@@ -4,7 +4,9 @@ import Button from "../../../components/Button";
 import EditableField from "./EditableField";
 import ChangePassword from './ChangePassword';
 import { changeUserDetails } from "../../../services/user/user.api";
+import { resendVerification } from "../../../services/auth.api";
 import { useToast } from "../../../context/ToastContext";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 
 function UserDetails() {
   const { user } = useAuth();
@@ -22,6 +24,7 @@ function UserDetails() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -79,13 +82,26 @@ function UserDetails() {
 
       if (response.success) {
         setEditing({ name: false, email: false });
-        showToast("Saved changes successfully");
+        showToast("Profile details updated successfully.");
         return;
       } else {
-        console.log("Update failed", response);
+        showToast("Unable to update profile details. Please try again.");
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!user?.email) return;
+    setIsResending(true);
+    try {
+      await resendVerification(user.email);
+      showToast("A verification link has been dispatched to your email address.");
+    } catch (error) {
+      showToast("Unable to dispatch verification email at this time. Please try again later.");
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -93,13 +109,34 @@ function UserDetails() {
 
   return (
     <div className="w-full max-w-md sm:max-w-lg lg:max-w-xl mx-auto bg-white shadow-md rounded-xl p-4 sm:p-6 lg:p-8 flex flex-col gap-4 sm:gap-6">
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center gap-3">
         <div
           className="
         w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28
         bg-gray-200 rounded-full flex items-center justify-center 
         overflow-hidden"
         ></div>
+        
+        {user?.verified ? (
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium border border-green-200">
+                <CheckCircle2 size={14} />
+                Verified Account
+            </div>
+        ) : (
+            <div className="flex flex-col items-center gap-2">
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-yellow-50/50 text-yellow-700 rounded-full text-xs font-medium border border-yellow-200">
+                    <AlertCircle size={14} />
+                    Unverified Account
+                </div>
+                <button 
+                    onClick={handleResend} 
+                    disabled={isResending}
+                    className="text-xs text-blue-600 cursor-pointer hover:text-blue-800 underline font-medium transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {isResending ? "Dispatching..." : "Send Verification Email"}
+                </button>
+            </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-4 sm:gap-5">
