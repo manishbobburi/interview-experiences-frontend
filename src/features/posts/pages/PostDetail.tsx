@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { toast } from "react-toastify";
 import Card from "../../../components/Card";
 import type { PostProps } from "../post.types";
 import { mapDifficulty } from "../../../utils/difficulty";
@@ -8,6 +9,10 @@ import { getPostBySlug } from "../../../services/posts.api";
 import DifficultyBadge from "../../../components/DifficultyBadge";
 import BackButton from "../../../components/BackButton";
 import { getAssetUrl } from "../../../utils/getAssetUrl";
+import { useAuth } from "../../auth/auth.context";
+import { ThumbsUp, MessageSquare } from "lucide-react";
+import { toggleLike } from "../../../services/votes.api";
+import CommentSection from "../components/CommentSection";
 
 
 export default function PostDetailPage() {
@@ -17,6 +22,7 @@ export default function PostDetailPage() {
   const [post, setPost] = useState<PostProps | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (!slug) return;
@@ -68,6 +74,21 @@ export default function PostDetailPage() {
     year: "numeric",
   });
 
+  const handleLike = async () => {
+    if (!user) {
+      toast.info("Please sign in to like this post.");
+      return;
+    }
+    const res = await toggleLike(post.id);
+    if (res.success && res.data) {
+      setPost({
+        ...post,
+        hasLiked: res.data.liked,
+        upvotes: post.upvotes + (res.data.liked ? 1 : -1)
+      });
+    }
+  };
+
 return (
   <div className="min-h-screen bg-white pt-14">
   <main className="max-w-3xl mx-auto px-4 py-8">
@@ -109,7 +130,7 @@ return (
 
           <hr className="border-gray-100 my-6" />
 
-          <div
+            <div
             className="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none wrap-break-word"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(post.body, {
@@ -122,9 +143,37 @@ return (
               }),
             }}
           />
+
+          <hr className="border-gray-100 my-6" />
+
+          {/* Actions Toolbar */}
+          <div className="flex items-center gap-6 mt-4">
+            <button
+              onClick={handleLike}
+              className={`flex items-center gap-1.5 transition-colors text-sm font-medium cursor-pointer ${post.hasLiked ? 'text-black' : 'text-gray-500 hover:text-black'}`}
+            >
+              <ThumbsUp size={18} className={post.hasLiked ? "fill-black" : ""} />
+              <span>{post.upvotes} {post.upvotes === 1 ? 'Like' : 'Likes'}</span>
+            </button>
+            <div 
+              className="flex items-center gap-1.5 text-gray-500 text-sm font-medium cursor-pointer hover:text-black transition-colors"
+              onClick={() => document.getElementById('comment-section')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              <MessageSquare size={18} />
+              <span>{post.commentsCount} {post.commentsCount === 1 ? 'Comment' : 'Comments'}</span>
+            </div>
+          </div>
         </div>
       </div>
     </Card>
+
+    <div className="px-4 md:px-0">
+      <CommentSection 
+        postId={post.id} 
+        onCommentAdded={() => setPost({...post, commentsCount: post.commentsCount + 1})}
+        onCommentDeleted={() => setPost({...post, commentsCount: Math.max(0, post.commentsCount - 1)})}
+      />
+    </div>
   </main>
 </div>
 

@@ -27,7 +27,19 @@ export type PostProps = {
   user?: User;
   company: Company;
   slug: string;
+  hasLiked?: boolean;
 };
+
+export interface CommentProps {
+  id: number;
+  postId: number;
+  userId: number;
+  text: string;
+  createdAt: string;
+  user: {
+    name: string;
+  };
+}
 
 export type PaginatedPosts = {
   items: PostProps[];

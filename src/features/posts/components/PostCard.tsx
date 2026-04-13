@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useNavigate, useMatch } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
-import { EllipsisVertical } from "lucide-react";
+import { toast } from "react-toastify";
+import { EllipsisVertical, ThumbsUp, MessageSquare } from "lucide-react";
 import Card from "../../../components/Card";
 import type { PostProps } from "../post.types";
 import Button from "../../../components/Button";
@@ -9,6 +10,7 @@ import { timeAgo } from "../../../utils/timeAgo";
 import { useAuth } from "../../auth/auth.context";
 import DropDown from "../../../components/DropDown";
 import { deletePost } from '../../../services/posts.api';
+import { toggleLike } from "../../../services/votes.api";
 import DifficultyBadge from "../../../components/DifficultyBadge";
 import { mapDifficulty } from "../../../utils/difficulty";
 import { hasRole } from "../../../utils/hasRole";
@@ -23,11 +25,24 @@ export default function PostCard({ post }: PostCardProps) {
   const createdAt = timeAgo(post.createdAt);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const match = useMatch("/user/:id");
-  const inProfile = Boolean(match);
   const isAdmin = hasRole(user, ["ADMIN"]);
+  const isOwner = Boolean(user?.id && post?.userId && user.id === post.userId);
 
-/* isOwner  need to be added*/
+  const [hasLiked, setHasLiked] = useState(post.hasLiked);
+  const [upvotes, setUpvotes] = useState(post.upvotes);
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) {
+      toast.info("Please sign in to like this post.");
+      return;
+    }
+    const res = await toggleLike(post.id);
+    if (res.success && res.data) {
+      setHasLiked(res.data.liked);
+      setUpvotes(prev => prev + (res.data.liked ? 1 : -1));
+    }
+  };
 
   const stripHtml = (html: string) => {
     const temp = document.createElement("div");
@@ -65,7 +80,7 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
         </div>
 
-        {(inProfile || isAdmin) && (
+        {(isOwner || isAdmin) && (
           <div className="relative"  onClick={(e) => e.stopPropagation()}>
             <Button
               variant="ghost"
@@ -87,8 +102,21 @@ export default function PostCard({ post }: PostCardProps) {
         {stripHtml(post.body)}
       </p>
 
-      <div className="flex justify-end items-center text-sm text-gray-500 mt-4">
-        <span>
+      <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-50">
+        <div className="flex items-center gap-4 text-sm text-gray-500 font-medium">
+          <div className={`flex items-center gap-1.5 cursor-pointer transition-colors ${hasLiked ? 'text-black' : 'hover:text-black'}`}
+               onClick={handleLike}>
+            <ThumbsUp size={16} className={hasLiked ? "fill-black" : ""} />
+            <span>{upvotes}</span>
+          </div>
+          <div className="flex items-center gap-1.5 hover:text-black cursor-pointer transition-colors"
+               onClick={(e) => { e.stopPropagation(); navigate(`/post/${post.slug}`); }}>
+            <MessageSquare size={16} />
+            <span>{post.commentsCount}</span>
+          </div>
+        </div>
+
+        <span className="text-sm text-gray-500">
           {post.displayName} • {createdAt}
         </span>
       </div>
