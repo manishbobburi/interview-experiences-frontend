@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { getPostsByUserName } from "../../../services/posts.api";
 import PostCard from "../../posts/components/PostCard";
 import type { PostProps } from "../../posts/post.types";
-import { useAuth } from "../../auth/auth.context";
 
 function UserPosts() {
-  const { user } = useAuth();
+  const { userId } = useParams<{ userId: string }>();
 
   const [userPosts, setUserPosts] = useState<PostProps[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!userId) return;
 
     const fetchPosts = async () => {
       try {
-        const response = await getPostsByUserName(user.id);
+        const response = await getPostsByUserName(Number(userId));
         setUserPosts(response.data);
       } catch (error) {
         console.error("Failed to fetch user posts", error);
@@ -24,7 +24,7 @@ function UserPosts() {
       }
     };
     fetchPosts();
-  }, [user?.id]);
+  }, [userId]);
 
   if (userPosts.length === 0) return <div>No posts created.</div>;
 

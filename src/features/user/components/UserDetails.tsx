@@ -65,7 +65,7 @@ function UserDetails() {
 
     const error = validate();
     if (error) {
-      console.log(error);
+      showToast(error);
       return;
     }
 
