@@ -86,7 +86,11 @@ function PostsPage() {
     return () => observer.disconnect();
   }, [cursor, hasMore, loading]);
 
-  if (posts.length === 0) return <div>No posts found.</div>;
+  if (posts.length === 0) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p className="text-gray-400 text-sm">Be the first one to create.</p>
+    </div>
+  );
 
   return (
     <div className="pt-16 px-4 sm:px-6 md:px-10 lg:px-14">
