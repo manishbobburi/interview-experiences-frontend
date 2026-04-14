@@ -28,6 +28,7 @@ export type PostProps = {
   company: Company;
   slug: string;
   hasLiked?: boolean;
+  isOwner?: boolean;
 };
 
 export interface CommentProps {

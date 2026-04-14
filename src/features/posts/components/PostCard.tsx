@@ -26,7 +26,7 @@ export default function PostCard({ post }: PostCardProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const isAdmin = hasRole(user, ["ADMIN"]);
-  const isOwner = Boolean(user?.id && post?.userId && user.id === post.userId);
+  const isOwner = Boolean(post?.isOwner);
 
   const [hasLiked, setHasLiked] = useState(post.hasLiked);
   const [upvotes, setUpvotes] = useState(post.upvotes);
