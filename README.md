@@ -51,6 +51,6 @@ Requires `.env.development` / `.env.production` to define backend targets, e.g.,
 
 ## UI Preview
 
-![Interview Experiences](HomeView.png)
+![Interview Experiences](public/HomeView.png)
 
-![Adobe Interview Experience](Detailed.png)
+![Adobe Interview Experience](public/Detailed.png)
