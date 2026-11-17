@@ -2,6 +2,10 @@
 
 This repository contains the frontend for the **Interview Experiences** platform, designed to provide a highly responsive, secure, and modern user interface for sharing and reading interview experiences.
 
+## Related Repositories
+ - Frontend (Current Repository): This repository.
+ - Backend: [Interview Experiences - Backend](https://github.com/manishbobburi/interview-experiences-backend)
+
 ## Technical Architecture
 
 The frontend is built using **React** and **Vite**, focusing on performance, modularity, and maintainability.
